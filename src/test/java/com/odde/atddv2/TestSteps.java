@@ -30,7 +30,7 @@ public class TestSteps {
     @当("测试环境")
     public void 测试环境() {
         getWebDriver().get("http://host.docker.internal:10081/");
-        assertThat(getWebDriver().findElements(xpath("//*[text()='登录']"))).isNotEmpty();
+        assertThat(getWebDriver().findElements(xpath("//*[text()='Login']"))).isNotEmpty();
         getWebDriver().quit();
     }
 
