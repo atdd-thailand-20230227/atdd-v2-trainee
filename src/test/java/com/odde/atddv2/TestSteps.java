@@ -1,9 +1,9 @@
 package com.odde.atddv2;
 
 import io.cucumber.java.After;
-import io.cucumber.java.zh_cn.假如;
-import io.cucumber.java.zh_cn.当;
-import io.cucumber.java.zh_cn.那么;
+import io.cucumber.java.en.Given;
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
 import lombok.SneakyThrows;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
@@ -27,31 +27,31 @@ public class TestSteps {
         getWebDriver().quit();
     }
 
-    @当("测试环境")
-    public void 测试环境() {
+    @Given("exists a user with username {string} and password {string}")
+    public void existsAUserWithUsernameAndPassword(String arg0, String arg1) {
+    }
+
+    @When("api login with username {string} and password {string}")
+    public void apiLoginWithUsernameAndPassword(String arg0, String arg1) {
+    }
+
+    @Then("print token")
+    public void printToken() {
+    }
+
+    @When("search {string} with google")
+    public void searchWithGoogle(String arg0) {
+    }
+
+    @Then("print search result count")
+    public void printSearchResultCount() {
+    }
+
+    @Then("test environment should be ok")
+    public void testEnvironmentShouldBeOk() {
         getWebDriver().get("http://host.docker.internal:10081/");
         assertThat(getWebDriver().findElements(xpath("//*[text()='Login']"))).isNotEmpty();
         getWebDriver().quit();
-    }
-
-    @那么("打印Token")
-    public void 打印_token() {
-    }
-
-    @那么("打印百度为您找到的相关结果数")
-    public void 打印百度为您找到的相关结果数() {
-    }
-
-    @假如("存在用户名为{string}和密码为{string}的用户")
-    public void 存在用户名为和密码为的用户(String arg0, String arg1) {
-    }
-
-    @当("通过API以用户名为{string}和密码为{string}登录时")
-    public void 通过api以用户名为和密码为登录时(String arg0, String arg1) {
-    }
-
-    @当("在百度搜索关键字{string}")
-    public void 在百度搜索关键字(String arg0) {
     }
 
     private WebDriver getWebDriver() {
