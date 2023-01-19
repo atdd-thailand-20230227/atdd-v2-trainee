@@ -34,11 +34,6 @@ public class TestSteps {
         return new RemoteWebDriver(new URL("http://web-driver.tool.net:4444"), DesiredCapabilities.chrome());
     }
 
-    @After
-    public void closeBrowser() {
-        getWebDriver().quit();
-    }
-
     @Given("exists a user with username {string} and password {string}")
     public void existsAUserWithUsernameAndPassword(String userName, String password) {
         userRepo.deleteAll();
