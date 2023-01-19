@@ -39,8 +39,8 @@ public class TestSteps {
     public void printToken() {
     }
 
-    @When("search {string} with google")
-    public void searchWithGoogle(String arg0) {
+    @When("search {string} with baidu")
+    public void searchWithBaidu(String arg0) {
     }
 
     @Then("print search result count")
