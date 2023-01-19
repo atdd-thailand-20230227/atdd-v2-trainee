@@ -7,8 +7,6 @@ import io.cucumber.java.After;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import io.cucumber.java.zh_cn.当;
-import io.cucumber.java.zh_cn.那么;
 import lombok.SneakyThrows;
 import okhttp3.*;
 import org.openqa.selenium.By;
@@ -93,27 +91,27 @@ public class TestSteps {
         }
     }
 
-    @当("以用户名为{string}和密码为{string}登录时")
-    public void 以用户名为和密码为登录时(String userName, String password) {
+    public WebDriver getWebDriver() {
+        if (webDriver == null)
+            webDriver = createWebDriver();
+        return webDriver;
+    }
+
+    @When("I login with username {string} and password {string}")
+    public void iLoginWithUsernameAndPassword(String userName, String password) {
         getWebDriver().get("http://host.docker.internal:10081");
         await().ignoreExceptions().until(() -> getWebDriver().findElement(xpath("//*[@id=\"app\"]/div/form/div[2]/div/div/input")), Objects::nonNull).sendKeys(userName);
         await().ignoreExceptions().until(() -> getWebDriver().findElement(xpath("//*[@id=\"app\"]/div/form/div[3]/div/div/input")), Objects::nonNull).sendKeys(password);
         await().ignoreExceptions().until(() -> getWebDriver().findElement(xpath("//*[@id=\"app\"]/div/form/button/span")), Objects::nonNull).click();
     }
 
-    @那么("{string}登录成功")
-    public void 登录成功(String userName) {
+    @Then("{string} should be logged in")
+    public void shouldBeLoggedIn(String userName) {
         await().ignoreExceptions().untilAsserted(() -> assertThat(getWebDriver().findElements(xpath("//*[text()='" + ("Welcome " + userName) + "']"))).isNotEmpty());
     }
 
-    @那么("登录失败的错误信息是{string}")
-    public void 登录失败的错误信息是(String message) {
+    @Then("login failed error message should be {string}")
+    public void loginFailedErrorMessageShouldBe(String message) {
         await().ignoreExceptions().untilAsserted(() -> assertThat(getWebDriver().findElements(xpath("//*[text()='" + message + "']"))).isNotEmpty());
-    }
-
-    public WebDriver getWebDriver() {
-        if (webDriver == null)
-            webDriver = createWebDriver();
-        return webDriver;
     }
 }
