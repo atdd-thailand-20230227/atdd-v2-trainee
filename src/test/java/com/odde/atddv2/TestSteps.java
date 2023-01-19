@@ -58,9 +58,8 @@ public class TestSteps {
         System.out.println("response.header(\"token\") = " + response.header("token"));
     }
 
-    @SneakyThrows
-    @When("search {string} with google")
-    public void searchWithGoogle(String keyword) {
+    @When("search {string} with baidu")
+    public void searchWithBaidu(String keyword) {
         getWebDriver().get("http://www.baidu.com");
         webDriver.findElement(By.xpath("//*[@id='kw']")).sendKeys(keyword);
         webDriver.findElement(By.xpath("//*[@id='su']")).click();
