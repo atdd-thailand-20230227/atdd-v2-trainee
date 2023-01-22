@@ -1,10 +1,10 @@
-# language: zh-CN
+# language: en
 @ui-login
-功能: 订单
+Feature: Order
 
-  场景: 录入订单
-    当用如下数据录入订单:
-      | 订单号   | 商品名称 | 金额 | 收件人 | 电话          | 地址     | 状态  |
-      | SN001 | 衬衫   | 19 | 张三  | 13085901735 | 上海市长宁区 | 待发货 |
-    那么显示如下订单
-      | SN001 | 衬衫 | ￥19 | 待发货 |
+  Scenario: Create order
+    When create order with data below:
+      | Order number | Product name | Total | Recipient name | Recipient mobile | Recipient address | Status          |
+      | SN001        | T-shirt      | 19    | Tom            | 415-555-2671     | New York          | To be delivered |
+    Then the following order should be displayed:
+      | SN001 | T-shirt | $19 | Tom | 415-555-2671 | New York | To be delivered |
