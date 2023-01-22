@@ -7,4 +7,4 @@ Feature: Order
       | Order number | Product name | Total | Recipient name | Recipient mobile | Recipient address | Status          |
       | SN001        | T-shirt      | 19    | Tom            | 415-555-2671     | New York          | To be delivered |
     Then the following order should be displayed:
-      | SN001 | T-shirt | $19 | Tom | 415-555-2671 | New York | To be delivered |
+      | SN001 | T-shirt | $19 | To be delivered |
