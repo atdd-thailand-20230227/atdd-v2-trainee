@@ -2,8 +2,8 @@ package com.odde.atddv2;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.odde.atddv2.entity.User;
-import io.cucumber.java.zh_cn.当;
-import io.cucumber.java.zh_cn.那么;
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
 import lombok.SneakyThrows;
 import okhttp3.*;
 import org.openqa.selenium.By;
@@ -20,28 +20,9 @@ public class TestSteps {
     Browser browser;
     private Response response;
 
-    @当("测试环境")
-    public void 测试环境() {
-        getWebDriver().get("http://host.docker.internal:10081/");
-        assertThat(getWebDriver().findElements(xpath("//*[text()='登录']"))).isNotEmpty();
-    }
-
-    @那么("打印Token")
-    public void 打印_token() {
-        System.out.println("response.header(\"token\") = " + response.header("token"));
-    }
-
     @SneakyThrows
-    @那么("打印百度为您找到的相关结果数")
-    public void 打印百度为您找到的相关结果数() {
-        TimeUnit.SECONDS.sleep(2);
-        String text = getWebDriver().findElement(xpath("//*[@id='container']/div[2]/div/div[2]/span")).getText();
-        System.out.println("text = " + text);
-    }
-
-    @SneakyThrows
-    @当("通过API以用户名为{string}和密码为{string}登录时")
-    public void 通过api以用户名为和密码为登录时(String userName, String password) {
+    @When("api login with username {string} and password {string}")
+    public void apiLoginWithUsernameAndPassword(String userName, String password) {
         OkHttpClient okHttpClient = new OkHttpClient();
         ObjectMapper objectMapper = new ObjectMapper();
         RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), objectMapper.writeValueAsString(new User().setUserName(userName).setPassword(password)));
@@ -49,15 +30,34 @@ public class TestSteps {
         response = okHttpClient.newCall(request).execute();
     }
 
-    @SneakyThrows
-    @当("在百度搜索关键字{string}")
-    public void 在百度搜索关键字(String keyword) {
+    @Then("print token")
+    public void printToken() {
+        System.out.println("response.header(\"token\") = " + response.header("token"));
+    }
+
+    @When("search {string} with baidu")
+    public void searchWithBaidu(String keyword) {
         getWebDriver().get("http://www.baidu.com");
         getWebDriver().findElement(By.xpath("//*[@id='kw']")).sendKeys(keyword);
         getWebDriver().findElement(By.xpath("//*[@id='su']")).click();
     }
 
+    @SneakyThrows
+    @Then("print search result count")
+    public void printSearchResultCount() {
+        TimeUnit.SECONDS.sleep(2);
+        String text = getWebDriver().findElement(xpath("//*[@id='container']/div[2]/div/div[2]/span")).getText();
+        System.out.println("text = " + text);
+    }
+
+    @Then("test environment should be ok")
+    public void testEnvironmentShouldBeOk() {
+        getWebDriver().get("http://host.docker.internal:10081/");
+        assertThat(getWebDriver().findElements(xpath("//*[text()='Login']"))).isNotEmpty();
+    }
+
     private WebDriver getWebDriver() {
         return browser.getWebDriver();
     }
+
 }
