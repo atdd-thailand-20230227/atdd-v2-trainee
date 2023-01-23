@@ -1,16 +1,16 @@
-# language: zh-CN
-功能: 订单
+# language: en
+Feature: Order
 
-  场景: 订单列表
-    假如存在如下订单:
+  Scenario: Order list
+    Given exists the following orders:
       | code  | productName | total | recipientName | status        |
-      | SN001 | 电脑          | 19999 | 张三            | toBeDelivered |
-    当API查询订单时
-    那么返回如下订单
+      | SN001 | laptop      | 19999 | Jerry         | toBeDelivered |
+    When API query order list
+    Then the response order should be:
     """
       [{
         "code": "SN001",
-        "productName": "电脑",
+        "productName": "laptop",
         "total": 19999,
         "status": "toBeDelivered"
       }]
