@@ -1,17 +1,17 @@
 package com.odde.atddv2;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.odde.atddv2.entity.Order;
-import com.odde.atddv2.entity.OrderLine;
 import com.odde.atddv2.repo.OrderRepo;
 import io.cucumber.datatable.DataTable;
-import io.cucumber.java.zh_cn.并且;
-import io.cucumber.java.zh_cn.当;
-import io.cucumber.java.zh_cn.那么;
+import io.cucumber.java.en.And;
+import io.cucumber.java.en.Given;
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
-import javax.transaction.Transactional;
 import java.util.HashMap;
 
 import static com.odde.atddv2.entity.Order.OrderStatus.delivering;
@@ -28,46 +28,45 @@ public class ApiOrderSteps {
     @Value("${binstd-endpoint.key}")
     private String binstdAppKey;
 
-    @当("API查询订单时")
-    public void api查询订单时() {
+    @Given("exists the following orders:")
+    public void existsTheFollowingOrders(DataTable table) {
+        ObjectMapper objectMapper = new ObjectMapper();
+        JavaTimeModule module = new JavaTimeModule();
+        objectMapper.registerModule(module);
+        table.asMaps().forEach(map -> orderRepo.save(objectMapper.convertValue(map, Order.class)));
+    }
+
+    @When("API query order list")
+    public void apiQueryOrderList() {
         api.get("orders");
     }
 
-    @那么("返回如下订单")
-    public void 返回如下订单(String json) {
+    @Then("the response order should be:")
+    public void theResponseOrderShouldBe(String json) {
         api.responseShouldMatchJson(json);
     }
 
-    @并且("存在订单{string}的订单项:")
-    @Transactional
-    public void 存在订单的订单项(String orderCode, DataTable table) {
-        ObjectMapper objectMapper = new ObjectMapper();
-        Order order = orderRepo.findByCode(orderCode);
-        table.asMaps().forEach(map -> order.getLines().add(objectMapper.convertValue(map, OrderLine.class).setOrder(order)));
-        orderRepo.save(order);
-    }
-
-    @当("API查询订单{string}详情时")
-    public void api查询订单详情时(String code) {
+    @When("API query order detail with {string}")
+    public void apiQueryOrderDetailWith(String code) {
         api.get(String.format("orders/%s", code));
     }
 
-    @当("通过API发货订单{string}，快递单号为{string}")
-    public void 通过api发货订单快递单号为(String order, String deliverNo) {
+    @When("API deliver order {string} with delivery number {string}")
+    public void apiDeliverOrderWithDeliveryNumber(String order, String deliverNo) {
         api.post(String.format("orders/%s/deliver", order), new HashMap<String, String>() {{
             put("deliverNo", deliverNo);
         }});
     }
 
-    @那么("订单{string}已发货，快递单号为{string}")
-    public void 订单已发货快递单号为(String order, String deliverNo) {
+    @Then("order {string} status should be delivering and delivery number should be {string}")
+    public void orderStatusShouldBeAndDeliveryNumberShouldBe(String order, String deliverNo) {
         assertThat(orderRepo.findByCode(order))
                 .hasFieldOrPropertyWithValue("deliverNo", deliverNo)
                 .hasFieldOrPropertyWithValue("status", delivering);
     }
 
-    @并且("存在快递单{string}的物流信息如下")
-    public void 存在快递单的物流信息如下(String deliverNo, String json) {
+    @And("exists delivery information of {string} as below:")
+    public void existsDeliveryInformationOfAsBelow(String deliverNo, String json) {
         mockServer.getJson("/express/query", (request) -> request.withQueryStringParameter("appkey", binstdAppKey)
                 .withQueryStringParameter("type", "auto")
                 .withQueryStringParameter("number", deliverNo), json);
