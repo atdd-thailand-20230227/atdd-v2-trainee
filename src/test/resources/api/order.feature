@@ -11,7 +11,7 @@ Feature: Order
     """
       [{
         "code": "SN001",
-        "productName": "电脑",
+        "productName": "laptop",
         "total": 19999,
         "status": "toBeDelivered"
       }]
