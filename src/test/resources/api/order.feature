@@ -107,8 +107,8 @@ Feature: Order
                       "status": "Shandong Qingzhou City Company-Zhao Liangtao (13606367012) has been received"
                   }
               ],
-              "deliveryStatus": "On the way",
-              "isSigned": "No"
+              "deliveryStatus": "On The Way",
+              "isSigned": "Unreceipted"
           }
         }
       """
