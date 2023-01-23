@@ -43,7 +43,6 @@ Feature: Order
     Then order "SN001" status should be delivering and delivery number should be "SF001"
 
   Scenario: Order detail - with logistics
-  假如存在如下订单:
     Given exists the following orders:
       | code  | productName | total | recipientName | recipientMobile | recipientAddress | status     | deliverNo     | deliveredAt         |
       | SN001 | laptop      | 19999 | Jerry         | 415-555-2671    | New York         | delivering | 4313751158896 | 2022-02-26 16:25:01 |
