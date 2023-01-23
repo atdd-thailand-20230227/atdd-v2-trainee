@@ -3,7 +3,7 @@
 Feature: Order
 
   Scenario: Order list
-    Given Exists data "订单":
+    Given Exists data "Order":
       | code  | productName | total | status        |
       | SN001 | laptop      | 19999 | toBeDelivered |
     When API query order list
@@ -18,7 +18,7 @@ Feature: Order
     """
 
   Scenario: Order detail - no logistics
-    Given Exists data "未发货的 订单":
+    Given Exists data "ToBeDelivered Order":
       | code  | productName | total | recipientName | recipientMobile | recipientAddress |
       | SN001 | laptop      | 19999 | Jerry         | 415-555-2671    | New York         |
     When API query order detail with "SN001"
@@ -36,14 +36,14 @@ Feature: Order
     """
 
   Scenario: Deliver order
-    Given Exists data "未发货的 订单":
+    Given Exists data "ToBeDelivered Order":
       | code  |
       | SN001 |
     When API deliver order "SN001" with delivery number "SF001"
     Then order "SN001" status should be delivering and delivery number should be "SF001"
 
   Scenario: Order detail - with logistics
-    Given Exists data "订单":
+    Given Exists data "Order":
       | code  | productName | total | recipientName | recipientMobile | recipientAddress | status     | deliverNo     | deliveredAt          |
       | SN001 | laptop      | 19999 | Jerry         | 415-555-2671    | New York         | delivering | 4313751158896 | 2022-02-26T16:25:01Z |
     And exists delivery information of "4313751158896" as below:
