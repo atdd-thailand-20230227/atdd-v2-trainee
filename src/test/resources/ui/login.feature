@@ -1,12 +1,12 @@
-# language: zh-CN
-功能: 登录
+# language: en
+Feature: Login
 
-  场景: 登录成功
-    假如存在用户名为"joseph"和密码为"123"的用户
-    当以用户名为"joseph"和密码为"123"登录时
-    那么"joseph"登录成功
+  Scenario: Login successfully
+    Given exists a user with username "joseph" and password "123"
+    When I login with username "joseph" and password "123"
+    Then "joseph" should be logged in
 
-  场景: 登录失败
-    假如存在用户名为"joseph"和密码为"123"的用户
-    当以用户名为"joseph"和密码为"incorrect-password"登录时
-    那么登录失败的错误信息是"无效的用户名或密码"
+  Scenario: Login failed
+    Given exists a user with username "joseph" and password "123"
+    When I login with username "joseph" and password "incorrect-password"
+    Then login failed error message should be "Invalid username or password"
