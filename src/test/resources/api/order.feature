@@ -1,113 +1,114 @@
-# language: zh-CN
+# language: en
 @api-login
-功能: 订单
+Feature: Order
 
-  场景: 订单列表
-    假如存在如下订单:
+  Scenario: Order list
+    Given exists the following orders:
       | code  | productName | total | recipientName | status        |
-      | SN001 | 电脑          | 19999 | 张三            | toBeDelivered |
-    当API查询订单时
-    那么返回如下订单
+      | SN001 | laptop      | 19999 | Jerry         | toBeDelivered |
+    When API query order list
+    Then the response order should be:
     """
       [{
         "code": "SN001",
-        "productName": "电脑",
+        "productName": "laptop",
         "total": 19999,
         "status": "toBeDelivered"
       }]
     """
 
-  场景: 订单详情 - 无物流
-    假如存在如下订单:
+  Scenario: Order detail - no logistics
+    Given exists the following orders:
       | code  | productName | total | recipientName | recipientMobile | recipientAddress | status        |
-      | SN001 | 电脑          | 19999 | 张三            | 13085901735     | 上海市长宁区           | toBeDelivered |
-    当API查询订单"SN001"详情时
-    那么返回如下订单
+      | SN001 | laptop      | 19999 | Jerry         | 415-555-2671    | New York         | toBeDelivered |
+    When API query order detail with "SN001"
+    Then the response order should be:
     """
       {
         "code": "SN001",
-        "productName": "电脑",
+        "productName": "laptop",
         "total": 19999,
-        "recipientName": "张三",
-        "recipientMobile": "13085901735",
-        "recipientAddress": "上海市长宁区",
+        "recipientName": "Jerry",
+        "recipientMobile": "415-555-2671",
+        "recipientAddress": "New York",
         "status": "toBeDelivered"
       }
     """
 
-  场景: 订单发货
-    假如存在如下订单:
+  Scenario: Deliver order
+    Given exists the following orders:
       | code  | productName | total | recipientName | recipientMobile | recipientAddress | status        |
-      | SN001 | 电脑          | 19999 | 张三            | 13085901735     | 上海市长宁区           | toBeDelivered |
-    当通过API发货订单"SN001"，快递单号为"SF001"
-    那么订单"SN001"已发货，快递单号为"SF001"
+      | SN001 | laptop      | 19999 | Jerry         | 415-555-2671    | New York         | toBeDelivered |
+    When API deliver order "SN001" with delivery number "SF001"
+    Then order "SN001" status should be delivering and delivery number should be "SF001"
 
-  场景: 订单详情 - 查询物流
-    假如存在如下订单:
+  Scenario: Order detail - with logistics
+  假如存在如下订单:
+    Given exists the following orders:
       | code  | productName | total | recipientName | recipientMobile | recipientAddress | status     | deliverNo     | deliveredAt         |
-      | SN001 | 电脑          | 19999 | 张三            | 13085901735     | 上海市长宁区           | delivering | 4313751158896 | 2022-02-26 16:25:01 |
-    并且存在快递单"4313751158896"的物流信息如下
-    """
-    {
-        "status": 0,
-        "msg": "ok",
-        "result": {
-            "number": "4313751158896",
-            "type": "yunda",
-            "typename": "韵达快运",
-            "logo": "https://api.jisuapi.com/express/static/images/logo/80/yunda.png",
-            "list": [
-                {
-                    "time": "2021-04-16 23:51:55",
-                    "status": "【潍坊市】已离开 山东潍坊分拨中心；发往 成都东地区包"
-                },
-                {
-                    "time": "2021-04-16 23:45:47",
-                    "status": "【潍坊市】已到达 山东潍坊分拨中心"
-                },
-                {
-                    "time": "2021-04-16 16:47:35",
-                    "status": "【潍坊市】山东青州市公司-赵良涛(13606367012) 已揽收"
-                }
-            ],
-            "deliverystatus": 1,
-            "issign": 0
-        }
-    }
-    """
-    当API查询订单"SN001"详情时
-    那么返回如下订单
+      | SN001 | laptop      | 19999 | Jerry         | 415-555-2671    | New York         | delivering | 4313751158896 | 2022-02-26 16:25:01 |
+    And exists delivery information of "4313751158896" as below:
     """
       {
-        "code": "SN001",
-        "productName": "电脑",
-        "total": 19999,
-        "recipientName": "张三",
-        "recipientMobile": "13085901735",
-        "recipientAddress": "上海市长宁区",
-        "status": "delivering",
-        "deliveredAt": "2022-02-26 16:25:01",
-        "logistics": {
-            "deliverNo": "4313751158896",
-            "companyCode": "yunda",
-            "companyName": "韵达快运",
-            "companyLogo": "https://api.jisuapi.com/express/static/images/logo/80/yunda.png",
-            "details": [
-                {
-                    "time": "2021-04-16 23:51:55",
-                    "status": "【潍坊市】已离开 山东潍坊分拨中心；发往 成都东地区包"
-                },
-                {
-                    "time": "2021-04-16 23:45:47",
-                    "status": "【潍坊市】已到达 山东潍坊分拨中心"
-                },
-                {
-                    "time": "2021-04-16 16:47:35",
-                    "status": "【潍坊市】山东青州市公司-赵良涛(13606367012) 已揽收"
-                }
-            ],
-            "deliveryStatus": "在途中",
-            "isSigned": "未签收"
-        }
+          "status": 0,
+          "msg": "ok",
+          "result": {
+              "number": "4313751158896",
+              "type": "yunda",
+              "typename": "Yunda Express",
+              "logo": "https://api.jisuapi.com/express/static/images/logo/80/yunda.png",
+              "list": [
+                  {
+                      "time": "2021-04-16 23:51:55",
+                      "status": "Leaving Shandong Weifang Distribution Center; Going to Chengdu East District"
+                  },
+                  {
+                      "time": "2021-04-16 23:45:47",
+                      "status": "Arrived Shandong Weifang Distribution Center"
+                  },
+                  {
+                      "time": "2021-04-16 16:47:35",
+                      "status": "Shandong Qingzhou City Company-Zhao Liangtao (13606367012) has been received"
+                  }
+              ],
+              "deliverystatus": 1,
+              "issign": 0
+          }
       }
+      """
+    When API query order detail with "SN001"
+    Then the response order should be:
     """
+        {
+          "code": "SN001",
+          "productName": "laptop",
+          "total": 19999,
+          "recipientName": "Jerry",
+          "recipientMobile": "415-555-2671",
+          "recipientAddress": "New York",
+          "status": "delivering",
+          "deliveredAt": "2022-02-26 16:25:01",
+          "logistics": {
+              "deliverNo": "4313751158896",
+              "companyCode": "yunda",
+              "companyName": "Yunda Express",
+              "companyLogo": "https://api.jisuapi.com/express/static/images/logo/80/yunda.png",
+              "details": [
+                  {
+                      "time": "2021-04-16 23:51:55",
+                      "status": "Leaving Shandong Weifang Distribution Center; Going to Chengdu East District"
+                  },
+                  {
+                      "time": "2021-04-16 23:45:47",
+                      "status": "Arrived Shandong Weifang Distribution Center"
+                  },
+                  {
+                      "time": "2021-04-16 16:47:35",
+                      "status": "Shandong Qingzhou City Company-Zhao Liangtao (13606367012) has been received"
+                  }
+              ],
+              "deliveryStatus": "On the way",
+              "isSigned": "No"
+          }
+        }
+      """
