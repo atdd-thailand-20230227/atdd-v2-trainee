@@ -1,7 +1,5 @@
 package com.odde.atddv2;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.odde.atddv2.entity.Order;
 import com.odde.atddv2.page.OrderPage;
 import com.odde.atddv2.page.WelcomePage;
 import com.odde.atddv2.repo.OrderRepo;
@@ -27,8 +25,6 @@ public class OrderSteps {
 
     @假如("存在如下订单:")
     public void 存在如下订单(DataTable table) {
-        ObjectMapper objectMapper = new ObjectMapper();
-        table.asMaps().forEach(map -> orderRepo.save(objectMapper.convertValue(map, Order.class)));
     }
 
     @When("create order with data below:")
