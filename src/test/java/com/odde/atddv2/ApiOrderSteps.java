@@ -34,7 +34,7 @@ public class ApiOrderSteps {
     @SneakyThrows
     @当("API查询订单时")
     public void api查询订单时() {
-        loginSteps.存在用户名为和密码为的用户("j", "j");
+        loginSteps.existsAUserWithUsernameAndPassword("j", "j");
         ObjectMapper objectMapper = new ObjectMapper();
         RequestBody requestBody = RequestBody.create(MediaType.parse("application/json"), objectMapper.writeValueAsString(new User().setUserName("j").setPassword("j")));
         Request request = new Request.Builder().url("http://localhost:10081/users/login").post(requestBody).build();
