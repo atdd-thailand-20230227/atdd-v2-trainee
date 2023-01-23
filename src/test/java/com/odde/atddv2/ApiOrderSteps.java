@@ -6,7 +6,7 @@ import com.odde.atddv2.entity.User;
 import com.odde.atddv2.repo.UserRepo;
 import io.cucumber.docstring.DocString;
 import io.cucumber.java.Before;
-import io.cucumber.java.zh_cn.并且;
+import io.cucumber.java.en.And;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -45,8 +45,8 @@ public class ApiOrderSteps {
         restfulStep.setBaseUrl("http://localhost:10081/api");
     }
 
-    @并且("存在快递单{string}的物流信息如下")
-    public void 存在快递单的物流信息如下(String deliverNo, String json) {
+    @And("exists delivery information of {string} as below:")
+    public void existsDeliveryInformationOfAsBelow(String deliverNo, String json) {
         mockServer.getJson("/express/query", (request) -> request.withQueryStringParameter("appkey", binstdAppKey)
                 .withQueryStringParameter("type", "auto")
                 .withQueryStringParameter("number", deliverNo), json);
