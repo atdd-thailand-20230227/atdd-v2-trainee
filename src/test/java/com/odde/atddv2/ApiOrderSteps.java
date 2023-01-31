@@ -1,6 +1,7 @@
 package com.odde.atddv2;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.odde.atddv2.entity.Order;
 import com.odde.atddv2.repo.OrderRepo;
 import io.cucumber.datatable.DataTable;
@@ -20,6 +21,8 @@ public class ApiOrderSteps {
     @Given("exists the following orders:")
     public void existsTheFollowingOrders(DataTable table) {
         ObjectMapper objectMapper = new ObjectMapper();
+        JavaTimeModule module = new JavaTimeModule();
+        objectMapper.registerModule(module);
         table.asMaps().forEach(map -> orderRepo.save(objectMapper.convertValue(map, Order.class)));
     }
 
