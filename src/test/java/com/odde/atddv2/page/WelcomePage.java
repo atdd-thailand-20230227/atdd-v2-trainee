@@ -10,6 +10,6 @@ public class WelcomePage {
     Browser browser;
 
     public void goToOrders() {
-        browser.clickByText("订单");
+        browser.clickByText("Order");
     }
 }
